@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, TextInput, SafeAreaView, StyleSheet } from 'react-native';
+import { Button, TextInput, Text, SafeAreaView, StyleSheet } from 'react-native';
 
 // NOTE: use this maybe: https://www.npmjs.com/package/react-native-login-screen
 export default function LoginScreen({navigation}) {
@@ -7,7 +7,7 @@ export default function LoginScreen({navigation}) {
   const [password, setPassword] = React.useState('');
     return (
         <SafeAreaView>
-          <h1>Login</h1>
+          <Text>Login</Text>
           <TextInput 
             placeholder='Username'
             style={styles.input}
@@ -17,9 +17,8 @@ export default function LoginScreen({navigation}) {
             style={styles.input}
             onChangeText={setPassword} value={password} />
           <Button title='login' />
-          <h1>Register</h1>
-          <hr/>
-          <p>under construction...</p>
+          <Text>Register</Text>          
+          <Text>under construction...</Text>
         </SafeAreaView>
     );
 }
