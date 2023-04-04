@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, TextInput, SafeAreaView, StyleSheet } from 'react-native';
+import { TextInput, SafeAreaView, StyleSheet } from 'react-native';
 
 export default function LoginScreen({navigation}) {
   const [username, setUsername] = React.useState('');
