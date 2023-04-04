@@ -1,52 +1,35 @@
 import React from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, useWindowDimensions } from 'react-native';
-import { TabView, SceneMap } from 'react-native-tab-view';
-import EventList from './components/EventList';
-import MasterList from './components/MasterList';
 
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-const FirstRoute = () => (
-    <EventList />  
-);
+import HomeScreen from './components/HomeScreen';
+import LoginScreen from './components/LoginScreen';
 
-const SecondRoute = () => (  
-    <MasterList />  
-);
-
-const renderScene = SceneMap({
-  first: FirstRoute,
-  second: SecondRoute,
-});
+const Stack = createNativeStackNavigator();
 
 export default function App() {
 
-  const layout = useWindowDimensions();
-
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    { key: 'first', title: 'Events' },
-    { key: 'second', title: 'Masters' },
-  ]);
 
   return (
-    // <View style={styles.container}>      
-    //   <StatusBar style="auto" />
-      <TabView
-        navigationState={{ index, routes }}
-        renderScene={renderScene}
-        onIndexChange={index => setIndex(index)}
-        initialLayout={{ width: layout.width }}
-      />     
-    // </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen 
+          name="Home"
+          component={HomeScreen}
+          // options={{title: 'Welcome' }} 
+          />
+      <Stack.Screen name="Login" component={LoginScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>               
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: '#fff',
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//   },
+// });
