@@ -19,6 +19,18 @@ const data = [
         location: 'Montreal',
         date: 'March 31, 2023'
     },
+    {
+      id: 3,
+      title: "Psychedelic Breath Work",
+      location: '52 St Lawrence St',
+      date: 'April 14 - April 15'
+    },
+    {
+      id: 4,
+      title: "Psychedelic Hangout Toronto",
+      location: 'Toad Pub & Grill, 330 Steeles Ave W, Thornhill',
+      date: 'April 6, 7:00 - 10:00 p.m.'
+    },
 ];
 
 function Item({ item, onPress, backgroundColor, textColor }) {
@@ -54,7 +66,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 16,
     },
     title: {
-        fontSize: 32,
+        fontSize: 28,
     },
 });
 
