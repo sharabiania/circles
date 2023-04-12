@@ -1,27 +1,40 @@
 import React from 'react'
-import { Button, TextInput, Text, SafeAreaView, StyleSheet } from 'react-native';
-import Register from './Register';
+import { TextInput, Text, SafeAreaView, StyleSheet } from 'react-native';
 
 // NOTE: use this maybe: https://www.npmjs.com/package/react-native-login-screen
-export default function LoginScreen({navigation}) {
-  const [username, setUsername] = React.useState('');
-  const [password, setPassword] = React.useState('');
+export default function Register({navigation}) {
 
+  const [username, setUsername] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [confirmPassword, setConfirmPassword] = React.useState('');
+  
     return (
         <SafeAreaView>
-          <Text>Login</Text>
+          <Text>Register</Text>
           <TextInput 
             placeholder='Username'
             style={styles.input}
             onChangeText={setUsername} value={username} />
+
+          <TextInput 
+            placeholder='Email'
+            style={styles.input}
+            onChangeText={setEmail} value={email} />
+        
           <TextInput 
             placeholder='Password'
             style={styles.input}
             secureTextEntry={true}
             onChangeText={setPassword} value={password} />
-          <Button title='login' />
-          <Register/> 
-                   
+            
+
+          <TextInput 
+            placeholder='Confirm Password'
+            style={styles.input}
+            secureTextEntry={true}
+            onChangeText={setConfirmPassword} value={confirmPassword} />
+
         </SafeAreaView>
     );
 }
