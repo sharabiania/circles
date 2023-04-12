@@ -20,16 +20,19 @@ export default function Register({navigation}) {
           <TextInput 
             placeholder='Email'
             style={styles.input}
-            onChangeText={setPassword} value={email} />
+            onChangeText={setEmail} value={email} />
         
           <TextInput 
             placeholder='Password'
             style={styles.input}
+            secureTextEntry={true}
             onChangeText={setPassword} value={password} />
+            
 
           <TextInput 
             placeholder='Confirm Password'
             style={styles.input}
+            secureTextEntry={true}
             onChangeText={setConfirmPassword} value={confirmPassword} />
 
         </SafeAreaView>

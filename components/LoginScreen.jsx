@@ -17,6 +17,7 @@ export default function LoginScreen({navigation}) {
           <TextInput 
             placeholder='Password'
             style={styles.input}
+            secureTextEntry={true}
             onChangeText={setPassword} value={password} />
           <Button title='login' />
           <Register/> 
