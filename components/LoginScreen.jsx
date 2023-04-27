@@ -10,7 +10,7 @@ import Register from "./Register";
 import { logInUser } from "../util/auth";
 //import Snackbar from "react-native-snackbar";
 import AuthContextProvider, { AuthContext } from "../store/auth-context";
-import LoadingOverlay from "./ui/LaodingOverlays";
+import LoadingOverlay from "./ui/LoadingOverlays";
 
 // NOTE: use this maybe: https://www.npmjs.com/package/react-native-login-screen
 export default function LoginScreen({ navigation }) {
