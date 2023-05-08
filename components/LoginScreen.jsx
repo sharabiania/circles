@@ -1,35 +1,54 @@
-import React, { useState } from "react";
+import { useContext, useState } from "react";
 import {
-  Button,
-  TextInput,
   Text,
   SafeAreaView,
+  TextInput,
   StyleSheet,
+  Button,
 } from "react-native";
+import { AuthContent } from "../store/auth-context";
+import { login } from "../util/auth";
 import Register from "./Register";
-import { logInUser } from "../util/auth";
-//import Snackbar from "react-native-snackbar";
-import AuthContextProvider, { AuthContext } from "../store/auth-context";
 import LoadingOverlay from "./ui/LoadingOverlays";
+import jwt_decode from "jwt-decode";
 
-// NOTE: use this maybe: https://www.npmjs.com/package/react-native-login-screen
 export default function LoginScreen({ navigation }) {
-  const [username, setUsername] = React.useState("");
-  const [password, setPassword] = React.useState("");
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [isAuthenticating, setIsAuthenticating] = useState(false);
 
-  async function logInHandler() {
+  const { setAuthUsername, setAuthToken, storedUsername } =
+    useContext(AuthContent);
+
+  async function checkValidAuth(response, status){
+    if (status == 401) {
+      alert("credentials not correct");
+    } else if (status == 200) {
+      const token = await response.text();
+      const decoded = jwt_decode(token);
+      const receivedUsername = decoded["cognito:username"];
+      if (username == receivedUsername) {
+        setAuthUsername(receivedUsername);
+        setAuthToken(decoded.event_id);
+        navigation.navigate("Home");
+      }
+    }
+  }
+  
+  async function authHandler() {
     setIsAuthenticating(true);
     try {
-      const token = await logInUser(username, password);
-      console.log(token);
-      navigation.navigate("Home");
+      const response = await login(username, password);
+      const status = response.status;
+      checkValidAuth(response, status)
+      setIsAuthenticating(false);
     } catch (error) {
-      alert("Your credentials is not correct", "Try again");
+      alert("server is down");
+      setAuthToken(null);
       setIsAuthenticating(false);
     }
   }
-
   if (isAuthenticating) {
     return <LoadingOverlay message="Logging you in..." />;
   }
@@ -43,6 +62,7 @@ export default function LoginScreen({ navigation }) {
         onChangeText={setUsername}
         value={username}
       />
+
       <TextInput
         placeholder="Password"
         style={styles.input}
@@ -53,7 +73,7 @@ export default function LoginScreen({ navigation }) {
       <Button
         title="login"
         disabled={!(password && username)}
-        onPress={logInHandler}
+        onPress={authHandler}
       />
       <Register />
     </SafeAreaView>
@@ -64,6 +84,8 @@ const styles = StyleSheet.create({
   input: {
     height: 40,
     margin: 12,
+    borderColor: "gray",
+    borderRadius: 6,
     borderWidth: 1,
     padding: 10,
   },
