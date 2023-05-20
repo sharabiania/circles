@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from 'react';
 import {
   TextInput,
   Text,
   SafeAreaView,
   StyleSheet,
   Button,
-} from "react-native";
-import { signup } from "../util/auth.js";
+} from 'react-native';
+import { signup } from '../util/auth.js';
+import { AuthContent } from '../store/auth-context';
 
 // NOTE: use this maybe: https://www.npmjs.com/package/react-native-login-screen
-export default function Register({ navigation }) {
+export default function RegisterScreen({ navigation }) {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -19,41 +20,54 @@ export default function Register({ navigation }) {
   const [isPassValid, setIsPassValid] = useState(true);
   const [isCfPassValid, setIsCfPassValid] = useState(true);
   const [isUsernameValid, setIsUsernameValid] = useState(true);
-  const [validCredentials, setValidCredentials]=useState(false);
+  const [validCredentials, setValidCredentials] = useState(false);
 
+  const { setFcn } = useContext(AuthContent);
   const minLength = 8;
 
   useEffect(() => {
-    if (!!password)
-      setIsCfPassValid(password === confirmPassword);}
-  , [password, confirmPassword]);
+    if (!!password) setIsCfPassValid(password === confirmPassword);
+  }, [password, confirmPassword]);
 
   useEffect(() => {
-    if (!!password){
-    setIsPassValid(password.length >= minLength);}
+    if (!!password) {
+      setIsPassValid(password.length >= minLength);
+    }
   }, [password]);
 
   useEffect(() => {
-    if(!!username)
-    setIsUsernameValid(username.match(/^\d/) == null && username.length >= minLength);
+    if (!!username)
+      setIsUsernameValid(
+        username.match(/^\d/) == null && username.length >= minLength
+      );
   }, [username]);
 
   useEffect(() => {
-    if(!!email)
-    {setIsEmailValid(email.includes("@"))};
+    if (!!email) {
+      setIsEmailValid(email.includes('@'));
+    }
   }, [email]);
 
   useEffect(() => {
-    if(email && username && password && confirmPassword)
-    setValidCredentials(isCfPassValid && isPassValid && isUsernameValid && isEmailValid);
-    else setValidCredentials(false)
-  }, [isUsernameValid, isEmailValid , isPassValid, isCfPassValid]);
+    if (email && username && password && confirmPassword)
+      setValidCredentials(
+        isCfPassValid && isPassValid && isUsernameValid && isEmailValid
+      );
+    else setValidCredentials(false);
+  }, [isUsernameValid, isEmailValid, isPassValid, isCfPassValid]);
 
-  async function signUpHandler(params) {
+  async function signUpHandler() {
     if (validCredentials) {
       try {
-        const response = await signup(username, password, email);
-        alert(await response.text());
+        const response = await signup(username, email, password);
+        if (response.status == 201) {
+          setFcn.setAuthUsername(username);
+          setFcn.setAuthPass(password);
+          navigation.navigate('Account Confirmation');
+        }
+        if (response.status != 201) {
+          alert(response.stauts);
+        }
       } catch (error) {
         alert(error);
       }
@@ -131,6 +145,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginLeft: 12,
     paddingRight: 10,
-    color: "red",
+    color: 'red',
   },
 });
