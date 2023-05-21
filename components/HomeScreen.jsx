@@ -6,26 +6,34 @@ import MasterList from './MasterList';
 import { useContext, useState } from 'react';
 import { AuthContent } from '../store/auth-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import SignUpButton from './ui/SignUpButton';
+import AuthButton from './ui/AuthButton';
 
 const Tab = createBottomTabNavigator();
 
 export default function HomeScreen({ navigation }) {
-  const {storedInfo} = useContext(AuthContent);
+  const { storedInfo, setFcn } = useContext(AuthContent);
   return (
     <>
       {!storedInfo.isAuthenticated && (
         <View>
           <Button title="Login" onPress={() => navigation.navigate('Login')} />
-          <SignUpButton
+          <AuthButton
             title="signUp"
             onPress={() => navigation.navigate('SignUp')}
-          ></SignUpButton>
+          ></AuthButton>
         </View>
       )}
       {storedInfo.isAuthenticated && (
-        <View style={styles.container}>
-          <Text style={styles.textWelcome}> Welcome {storedInfo.username}</Text>
+        <View>
+          <View style={styles.container}>
+            <Text style={styles.textWelcome}>
+              Welcome {storedInfo.username}
+            </Text>
+          </View>
+          <AuthButton
+            title="Logout"
+            onPress={() => setFcn.setAuthToken(null)}
+          ></AuthButton>
         </View>
       )}
       <Tab.Navigator
@@ -47,8 +55,8 @@ export default function HomeScreen({ navigation }) {
           tabBarInactiveTintColor: 'gray',
         })}
       >
-        <Tab.Screen name='Events' component={EventList} />
-        <Tab.Screen name='Masters' component={MasterList} />
+        <Tab.Screen name="Events" component={EventList} />
+        <Tab.Screen name="Masters" component={MasterList} />
       </Tab.Navigator>
     </>
   );
