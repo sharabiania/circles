@@ -1,13 +1,13 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-const SignUpButton = ({ title, onPress }) => (
+const AuthButton = ({ title, onPress }) => (
   <TouchableOpacity style={styles.button} onPress={onPress}>
     <Text style={styles.buttonText}>{title}</Text>
   </TouchableOpacity>
 );
 
-export default SignUpButton;
+export default AuthButton;
 
 const styles = StyleSheet.create({
   button: {
