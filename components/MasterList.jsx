@@ -1,29 +1,33 @@
 import React, { useState } from 'react';
 import {
-  FlatList, SafeAreaView, StatusBar, StyleSheet, Text,
+  FlatList,
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  Text,
   Button,
-  TouchableOpacity
-} from 'react-native'
+  TouchableOpacity,
+} from 'react-native';
 
 const data = [
   {
     id: 1,
-    title: "Master 1",
+    title: 'Master 1',
     location: 'Toronto',
   },
   {
     id: 2,
-    title: "Master 2",
+    title: 'Master 2',
     location: 'Montreal',
   },
   {
     id: 3,
-    title: "Master 3",
+    title: 'Master 3',
     location: 'Ottawa',
   },
   {
     id: 4,
-    title: "Master 4",
+    title: 'Master 4',
     location: 'Vancouver',
   },
 ];
@@ -31,19 +35,23 @@ const data = [
 function Item({ item, onPress, backgroundColor, textColor }) {
   const [btnText, setBtnText] = useState('follow');
   return (
-    <TouchableOpacity onPress={onPress} style={[styles.item, { backgroundColor }]}>
+    <TouchableOpacity
+      onPress={onPress}
+      style={[styles.item, { backgroundColor }]}
+    >
       <Text style={[styles.title, { color: textColor }]}>{item.title}</Text>
       <Text>{item.location}</Text>
-      <Button title={btnText} color="#841584" onPress={
-        () => {
+      <Button
+        title={btnText}
+        color='#841584'
+        onPress={() => {
           if (btnText === 'follow') {
             setBtnText('unfollow');
-          }
-          else {
+          } else {
             setBtnText('follow');
           }
-        }
-      } />
+        }}
+      />
     </TouchableOpacity>
   );
 }
@@ -57,7 +65,7 @@ const styles = StyleSheet.create({
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
-    borderRadius: 5
+    borderRadius: 5,
   },
   title: {
     fontSize: 32,
@@ -88,11 +96,10 @@ export default function MasterList() {
         <FlatList
           data={data}
           renderItem={renderItem}
-          keyExtractor={item => item.id}
+          keyExtractor={(item) => item.id}
           extraData={selectedId}
         />
       </SafeAreaView>
     </>
   );
-
 }

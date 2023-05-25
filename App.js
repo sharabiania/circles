@@ -15,14 +15,14 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
-            name="Home"
+            name='Home'
             component={HomeScreen}
             options={{ title: 'HOME' }}
           />
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="SignUp" component={RegisterScreen} />
+          <Stack.Screen name='Login' component={LoginScreen} />
+          <Stack.Screen name='SignUp' component={RegisterScreen} />
           <Stack.Screen
-            name="Account Confirmation"
+            name='Account Confirmation'
             component={AccountConfirmationScreen}
           />
         </Stack.Navigator>

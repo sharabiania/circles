@@ -9,7 +9,6 @@ import {
 import { signup } from '../util/auth.js';
 import { AuthContent } from '../store/auth-context';
 
-// NOTE: use this maybe: https://www.npmjs.com/package/react-native-login-screen
 export default function RegisterScreen({ navigation }) {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -78,7 +77,7 @@ export default function RegisterScreen({ navigation }) {
     <SafeAreaView>
       <Text>Register</Text>
       <TextInput
-        placeholder="Username"
+        placeholder='Username'
         style={isUsernameValid ? styles.input : styles.inputNotValid}
         onChangeText={setUsername}
         value={username}
@@ -88,7 +87,7 @@ export default function RegisterScreen({ navigation }) {
       )}
 
       <TextInput
-        placeholder="Email"
+        placeholder='Email'
         style={isEmailValid ? styles.input : styles.inputNotValid}
         onChangeText={setEmail}
         value={email}
@@ -96,7 +95,7 @@ export default function RegisterScreen({ navigation }) {
       {!isEmailValid && <Text style={styles.errorText}>Email not valid</Text>}
 
       <TextInput
-        placeholder="Password"
+        placeholder='Password'
         style={isPassValid ? styles.input : styles.inputNotValid}
         secureTextEntry={true}
         onChangeText={setPassword}
@@ -105,7 +104,7 @@ export default function RegisterScreen({ navigation }) {
       {!isPassValid && <Text style={styles.errorText}>Password not valid</Text>}
 
       <TextInput
-        placeholder="Confirm Password"
+        placeholder='Confirm Password'
         style={isCfPassValid ? styles.input : styles.inputNotValid}
         secureTextEntry={true}
         onChangeText={setConfirmPassword}
@@ -118,7 +117,7 @@ export default function RegisterScreen({ navigation }) {
       )}
 
       <Button
-        title="sign Up"
+        title='sign Up'
         disabled={!validCredentials}
         onPress={signUpHandler}
       ></Button>
@@ -132,6 +131,7 @@ const styles = StyleSheet.create({
     margin: 12,
     borderWidth: 1,
     padding: 10,
+    borderRadius: 6,
   },
   inputNotValid: {
     height: 40,
@@ -139,6 +139,7 @@ const styles = StyleSheet.create({
     marginBottom: 2,
     borderWidth: 1,
     padding: 10,
+    borderRadius: 6,
   },
   errorText: {
     marginTop: 0,

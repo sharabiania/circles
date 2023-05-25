@@ -3,7 +3,7 @@ import { Button, Text, View, StyleSheet } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import EventList from './EventList';
 import MasterList from './MasterList';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { AuthContent } from '../store/auth-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AuthButton from './ui/AuthButton';
@@ -16,9 +16,9 @@ export default function HomeScreen({ navigation }) {
     <>
       {!storedInfo.isAuthenticated && (
         <View>
-          <Button title="Login" onPress={() => navigation.navigate('Login')} />
+          <Button title='Login' onPress={() => navigation.navigate('Login')} />
           <AuthButton
-            title="signUp"
+            title='signUp'
             onPress={() => navigation.navigate('SignUp')}
           ></AuthButton>
         </View>
@@ -31,33 +31,34 @@ export default function HomeScreen({ navigation }) {
             </Text>
           </View>
           <AuthButton
-            title="Logout"
+            title='Logout'
             onPress={() => setFcn.setAuthToken(null)}
           ></AuthButton>
         </View>
       )}
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
-            if (route.name === 'Events') {
-              iconName = focused
-                ? 'ios-information-circle'
-                : 'ios-information-circle-outline';
-            } else if (route.name === 'Masters') {
-              iconName = focused ? 'ios-list' : 'ios-list-outline';
-            }
+      {storedInfo.isAuthenticated && (
+        <Tab.Navigator
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
+              if (route.name === 'Events') {
+                iconName = focused
+                  ? 'ios-information-circle'
+                  : 'ios-information-circle-outline';
+              } else if (route.name === 'Masters') {
+                iconName = focused ? 'ios-list' : 'ios-list-outline';
+              }
 
-            // You can return any component that you like here!
-            return <Ionicons name={iconName} size={size} color={color} />;
-          },
-          tabBarActiveTintColor: 'tomato',
-          tabBarInactiveTintColor: 'gray',
-        })}
-      >
-        <Tab.Screen name="Events" component={EventList} />
-        <Tab.Screen name="Masters" component={MasterList} />
-      </Tab.Navigator>
+              return <Ionicons name={iconName} size={size} color={color} />;
+            },
+            tabBarActiveTintColor: 'tomato',
+            tabBarInactiveTintColor: 'gray',
+          })}
+        >
+          <Tab.Screen name='Events' component={EventList} />
+          <Tab.Screen name='Masters' component={MasterList} />
+        </Tab.Navigator>
+      )}
     </>
   );
 }
