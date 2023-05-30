@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from 'react';
 import {
   FlatList,
   SafeAreaView,
@@ -7,38 +7,13 @@ import {
   Text,
   Button,
   TouchableOpacity,
-} from "react-native";
-
-const data = [
-  {
-    id: 1,
-    title: "Psy Expo",
-    location: "Toronto",
-    date: "March 31, 2023",
-    description: "",
-  },
-  {
-    id: 2,
-    title: "Psy Art Exibition",
-    location: "Montreal",
-    date: "March 31, 2023",
-  },
-  {
-    id: 3,
-    title: "Psychedelic Breath Work",
-    location: "52 St Lawrence St",
-    date: "April 14 - April 15",
-  },
-  {
-    id: 4,
-    title: "Psychedelic Hangout Toronto",
-    location: "Toad Pub & Grill, 330 Steeles Ave W, Thornhill",
-    date: "April 6, 7:00 - 10:00 p.m.",
-  },
-];
+} from 'react-native';
+import { getEvents } from '../util/auth';
+import { AuthContent } from '../store/auth-context';
 
 function Item({ item, onPress, backgroundColor, textColor }) {
-  const [btnText, setBtnText] = useState("Join");
+  const [btnText, setBtnText] = useState('Join');
+
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -50,12 +25,12 @@ function Item({ item, onPress, backgroundColor, textColor }) {
       <Text>{item.description}</Text>
       <Button
         title={btnText}
-        color="#841584"
+        color='#841584'
         onPress={() => {
-          if (btnText === "Join") {
-            setBtnText("Cancel Request");
+          if (btnText === 'Join') {
+            setBtnText('Cancel Request');
           } else {
-            setBtnText("Join");
+            setBtnText('Join');
           }
         }}
       />
@@ -81,10 +56,29 @@ const styles = StyleSheet.create({
 
 export default function EventList() {
   const [selectedId, setSelectedId] = useState();
+  const { storedInfo } = useContext(AuthContent);
+  const [data, setData] = useState();
+
+  async function getEventList(token) {
+    try {
+      const response = await getEvents(token);
+      const eventData = await response.json();
+      const status = response.status;
+      if (status === 200) {
+        setData(eventData);
+      }
+    } catch (error) {
+      alert(error);
+    }
+  }
+
+  if (!data && storedInfo.isAuthenticated) {
+    getEventList(storedInfo.token);
+  }
 
   const renderItem = ({ item }) => {
-    const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
-    const color = item.id === selectedId ? "white" : "black";
+    const backgroundColor = item.id === selectedId ? '#6e3b6e' : '#f9c2ff';
+    const color = item.id === selectedId ? 'white' : 'black';
 
     return (
       <Item
