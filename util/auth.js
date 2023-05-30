@@ -1,4 +1,4 @@
-const url = 'https://d94o460neg.execute-api.us-east-1.amazonaws.com/api/';
+const url = 'https://go9zuff869.execute-api.us-east-1.amazonaws.com/api/';
 
 export async function login(username, password) {
   const response = await fetch(url + 'login', {
@@ -29,6 +29,16 @@ export async function signupConfirm(username, confirmationCode) {
 
 export async function getEvents(token) {
   const response = await fetch(url + 'event', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  return response;
+}
+export async function getMasters(token) {
+  const response = await fetch(url + 'master', {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,

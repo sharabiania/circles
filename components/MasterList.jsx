@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   FlatList,
   SafeAreaView,
@@ -8,29 +8,8 @@ import {
   Button,
   TouchableOpacity,
 } from 'react-native';
-
-const data = [
-  {
-    id: 1,
-    title: 'Master 1',
-    location: 'Toronto',
-  },
-  {
-    id: 2,
-    title: 'Master 2',
-    location: 'Montreal',
-  },
-  {
-    id: 3,
-    title: 'Master 3',
-    location: 'Ottawa',
-  },
-  {
-    id: 4,
-    title: 'Master 4',
-    location: 'Vancouver',
-  },
-];
+import { getMasters } from '../util/auth';
+import { AuthContent } from '../store/auth-context';
 
 function Item({ item, onPress, backgroundColor, textColor }) {
   const [btnText, setBtnText] = useState('follow');
@@ -74,6 +53,25 @@ const styles = StyleSheet.create({
 
 export default function MasterList() {
   const [selectedId, setSelectedId] = useState();
+  const { storedInfo } = useContext(AuthContent);
+  const [data, setData] = useState();
+
+  async function getMasterList(token) {
+    try {
+      const response = await getMasters(token);
+      const masterData = await response.json();
+      const status = response.status;
+      if (status === 200) {
+        setData(masterData);
+      }
+    } catch (error) {
+      alert(error);
+    }
+  }
+
+  if (!data && storedInfo.isAuthenticated) {
+    getMasterList(storedInfo.token);
+  }
 
   const renderItem = ({ item }) => {
     const backgroundColor = item.id === selectedId ? '#6e3b6e' : '#f9c2ff';

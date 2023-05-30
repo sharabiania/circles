@@ -1,41 +1,76 @@
 import React from 'react';
-import { Button, Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import EventList from './EventList';
 import MasterList from './MasterList';
 import { useContext } from 'react';
 import { AuthContent } from '../store/auth-context';
+import { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import AuthButton from './ui/AuthButton';
+import LogoutModal from './ui/logOutModal';
 
 const Tab = createBottomTabNavigator();
 
-export default function HomeScreen({ navigation }) {
+const HomeNotLoginView = () => {
+  const navigation = useNavigation();
+  return (
+    <View style={styles.unAuthContainer}>
+      <Text style={styles.appName}>Welcome to Spritual Life</Text>
+      <TouchableOpacity
+        style={styles.loginButton}
+        onPress={() => navigation.navigate('Login')}
+      >
+        <Text style={styles.loginButtonText}>Login</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.signUpButton}
+        onPress={() => navigation.navigate('SignUp')}
+      >
+        <Text style={styles.signUpButtonText}>
+          Don't have an account? Sign up
+        </Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+export default function HomeScreen() {
   const { storedInfo, setFcn } = useContext(AuthContent);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleLogout = () => {
+    setModalVisible(false);
+    setFcn.setAuthToken(null);
+  };
+
   return (
     <>
-      {!storedInfo.isAuthenticated && (
-        <View>
-          <Button title='Login' onPress={() => navigation.navigate('Login')} />
-          <AuthButton
-            title='signUp'
-            onPress={() => navigation.navigate('SignUp')}
-          ></AuthButton>
-        </View>
-      )}
+      {!storedInfo.isAuthenticated && <HomeNotLoginView />}
+
       {storedInfo.isAuthenticated && (
-        <View>
-          <View style={styles.container}>
+        <View style={styles.authContainer}>
+          <View>
             <Text style={styles.textWelcome}>
-              Welcome {storedInfo.username}
+              Welcome {storedInfo.username}!
             </Text>
           </View>
-          <AuthButton
-            title='Logout'
-            onPress={() => setFcn.setAuthToken(null)}
-          ></AuthButton>
+
+          <TouchableOpacity
+            style={styles.logoutContainer}
+            onPress={() => setModalVisible(true)}
+          >
+            <Text style={styles.signOutText}>Sign out</Text>
+          </TouchableOpacity>
+
+          <LogoutModal
+            visible={modalVisible}
+            onCancel={() => setModalVisible(false)}
+            onLogout={handleLogout}
+          />
         </View>
       )}
+
       {storedInfo.isAuthenticated && (
         <Tab.Navigator
           screenOptions={({ route }) => ({
@@ -63,24 +98,66 @@ export default function HomeScreen({ navigation }) {
   );
 }
 const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'center',
-    alignItems: 'center',
+  authContainer: {
     borderWidth: 1,
-    borderColor: 'black',
+    borderColor: 'white',
     padding: 5,
-    backgroundColor: '#339FFF',
+    backgroundColor: '',
     borderRadius: 6,
   },
   textWelcome: {
-    flex: 1,
     fontSize: 15,
     fontWeight: 'bold',
     textAlign: 'center',
+    color: 'black',
+    marginBottom: 10,
+  },
+  unAuthContainer: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: 'lightyellow',
+  },
+  appName: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 80,
+    marginTop: 100,
+  },
+  loginButton: {
+    backgroundColor: 'grey',
+    borderRadius: 6,
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    marginBottom: 20,
+    marginTop: 80,
+  },
+  loginButtonText: {
     color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   signUpButton: {
-    color: 'grey',
-    backgroundColor: 'white',
+    marginBottom: 10,
+  },
+  signUpButtonText: {
+    color: 'blue',
+    fontSize: 14,
+    textDecorationLine: 'underline',
+  },
+  logoutContainer: {
+    alignItems: 'flex-end',
+    marginTop: 10,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  avatarButton: {
+    marginRight: 10,
+  },
+  signOutText: {
+    color: 'blue',
+    fontSize: 14,
+    fontWeight: 'bold',
   },
 });
