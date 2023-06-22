@@ -1,4 +1,6 @@
-const url = 'https://go9zuff869.execute-api.us-east-1.amazonaws.com/api/';
+const url2 = 'https://go9zuff869.execute-api.us-east-1.amazonaws.com/api/';
+const url1 = 'https://61x9lvgee8.execute-api.us-east-1.amazonaws.com/api/';
+const url='https://d94o460neg.execute-api.us-east-1.amazonaws.com/api/';
 
 export async function login(username, password) {
   const response = await fetch(url + 'login', {

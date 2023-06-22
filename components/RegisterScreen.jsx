@@ -60,8 +60,8 @@ export default function RegisterScreen({ navigation }) {
       try {
         const response = await signup(username, email, password);
         if (response.status == 201) {
-          setFcn.setAuthUsername(username);
-          setFcn.setAuthPass(password);
+          setFcn.settingUsername(username);
+          setFcn.setPass(password);
           navigation.navigate('Account Confirmation');
         }
         if (response.status != 201) {

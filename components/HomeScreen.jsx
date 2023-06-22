@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import EventList from './EventList';
 import MasterList from './MasterList';
@@ -8,7 +8,7 @@ import { AuthContent } from '../store/auth-context';
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import LogoutModal from './ui/logOutModal';
+import LogoutModal from './ui/LogOutModal';
 
 const Tab = createBottomTabNavigator();
 
@@ -27,9 +27,10 @@ const HomeNotLoginView = () => {
         style={styles.signUpButton}
         onPress={() => navigation.navigate('SignUp')}
       >
-        <Text style={styles.signUpButtonText}>
-          Don't have an account? Sign up
+        <Text>
+          Don't have an account? <Text style={styles.signUpButtonText}>Sign up</Text> 
         </Text>
+        
       </TouchableOpacity>
     </View>
   );
@@ -41,7 +42,7 @@ export default function HomeScreen() {
 
   const handleLogout = () => {
     setModalVisible(false);
-    setFcn.setAuthToken(null);
+    setFcn.logOut(null);
   };
 
   return (
@@ -50,7 +51,7 @@ export default function HomeScreen() {
 
       {storedInfo.isAuthenticated && (
         <View style={styles.authContainer}>
-          <View>
+          <View style={styles.welcomeContainer}>
             <Text style={styles.textWelcome}>
               Welcome {storedInfo.username}!
             </Text>
@@ -60,7 +61,10 @@ export default function HomeScreen() {
             style={styles.logoutContainer}
             onPress={() => setModalVisible(true)}
           >
-            <Text style={styles.signOutText}>Sign out</Text>
+            <Image
+                source={require('../assets/human.png')}
+                style={styles.buttonImage}
+              />
           </TouchableOpacity>
 
           <LogoutModal
@@ -102,15 +106,21 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'white',
     padding: 5,
-    backgroundColor: '',
-    borderRadius: 6,
+    backgroundColor: 'darkorchid',
+    flexDirection: 'row',
   },
   textWelcome: {
+    flex:1,
     fontSize: 15,
     fontWeight: 'bold',
-    textAlign: 'center',
-    color: 'black',
-    marginBottom: 10,
+    alignItems:'center',
+    color: 'yellow',
+  },
+  welcomeContainer:{
+    flex:1,
+    alignItems:'center',
+    marginTop: 10,
+    justifyContent: 'flex-end',
   },
   unAuthContainer: {
     flex: 1,
@@ -141,23 +151,19 @@ const styles = StyleSheet.create({
   signUpButton: {
     marginBottom: 10,
   },
-  signUpButtonText: {
+  signUpButtonText:{
+    fontWeight: 'bold',
     color: 'blue',
-    fontSize: 14,
-    textDecorationLine: 'underline',
   },
   logoutContainer: {
-    alignItems: 'flex-end',
-    marginTop: 10,
+    flex:1,
+    alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'flex-end',
   },
-  avatarButton: {
-    marginRight: 10,
-  },
-  signOutText: {
-    color: 'blue',
-    fontSize: 14,
-    fontWeight: 'bold',
+  buttonImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
   },
 });

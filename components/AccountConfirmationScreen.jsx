@@ -15,6 +15,7 @@ export default function AccountConfirmationScreen({ navigation }) {
   const { setFcn, storedInfo } = useContext(AuthContent);
 
   async function handleLoginRsp(response) {
+    console.log('.........'+JSON.stringify(response))
     if (response.status !== 200) {
       alert('Server is down, try again');
     } else if (response.status == 200) {
@@ -24,13 +25,12 @@ export default function AccountConfirmationScreen({ navigation }) {
   }
 
   function sparseJWT(token) {
-    setFcn.setAuthToken(token);
     let decodedJWT = jwt_decode(token);
-    console.log(decodedJWT['cognito:username']);
-    console.log(storedInfo.username);
-
-    setFcn.setEmailAdress(decodedJWT['email']);
-    setFcn.setExpTime(decodedJWT['exp']);
+    setFcn.setInfoToStore(
+      token,
+      decodedJWT['cognito:username'],
+      decodedJWT['exp']
+    );
     navigation.navigate('Home');
   }
 
@@ -38,16 +38,18 @@ export default function AccountConfirmationScreen({ navigation }) {
     try {
       const response = await signupConfirm(storedInfo.username, code);
       if (response.status == 200) {
-        console.log('I am here inside code 200');
+        console.log('I am here and that is correct')
         const loginResponse = await login(
           storedInfo.username,
           storedInfo.password
         );
         handleLoginRsp(loginResponse);
+      }else {
+        alert(response.text());
       }
     } catch (error) {
       alert(error);
-      setAuthToken(null);
+      //setFcn.logOut(null);
     }
   }
 
@@ -59,7 +61,7 @@ export default function AccountConfirmationScreen({ navigation }) {
       </Text>
       <TextInput
         style={styles.input}
-        placeholder="Confirmation Code"
+        placeholder='Confirmation Code'
         value={code}
         onChangeText={setCode}
       />

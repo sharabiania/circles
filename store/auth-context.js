@@ -1,4 +1,5 @@
-import { createContext, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createContext, useState, useEffect } from 'react';
 
 export const AuthContent = createContext({});
 
@@ -9,39 +10,58 @@ export default function AuthContentProvider(props) {
   const [email, setEmail] = useState('');
   const [expiration, setExpiration] = useState('');
 
-  const setAuthUsername = (username) => {
+  const setPass = (password) => {
+    setPassword(password);
+  };
+  const settingUsername = (username) => {
     setUsername(username);
   };
-  const setAuthPass = (username) => {
-    setPassword(username);
-  };
-  const setAuthToken = (token) => {
+  
+
+  useEffect(() => {
+    async function fetchToken() {
+      const storedToken = await AsyncStorage.getItem('token');
+      const storedExpiration = await AsyncStorage.getItem('expiration');
+      const storedUsername = await AsyncStorage.getItem('username');
+      if (storedToken) {
+        setInfoToStore(storedToken, storedUsername, storedExpiration);
+      }
+    }
+    fetchToken();
+  }, []);
+
+  const setInfoToStore = (token, username, expiration) => {
     setToken(token);
-  };
-  const setEmailAdress = (email) => {
-    setEmail(email);
-  };
-  const setExpTime = (expiration) => {
+    setUsername(username);
     setExpiration(expiration);
+    AsyncStorage.setItem('token', token);
+    AsyncStorage.setItem('username', username);
+    AsyncStorage.setItem('expiration', expiration);
+  };
+
+  const logOut = () => {
+    setToken(null);
+    setUsername(null);
+    setExpiration(null);
+    AsyncStorage.removeItem('token');
+    AsyncStorage.removeItem('expiration');
+    AsyncStorage.removeItem('username');
   };
 
   const storedInfo = {
     username: username,
-    password: password,
-    email: email,
     token: token,
     isAuthenticated: !!token,
     expiration: expiration,
+    password: password,
   };
 
   const setFcn = {
-    setAuthToken: setAuthToken,
-    setAuthUsername: setAuthUsername,
-    setEmailAdress: setEmailAdress,
-    setExpTime: setExpTime,
-    setAuthPass: setAuthPass,
+    setInfoToStore: setInfoToStore,
+    logOut: logOut,
+    setPass: setPass,
+    settingUsername:settingUsername,
   };
-
   const value = {
     storedInfo: storedInfo,
     setFcn: setFcn,
