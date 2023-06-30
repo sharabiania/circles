@@ -14,17 +14,15 @@ import jwt_decode from 'jwt-decode';
 export default function LoginScreen({ navigation }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [expiration, setExpiration] = useState('');
   const [isAuthenticating, setIsAuthenticating] = useState(false);
 
   const { setFcn } = useContext(AuthContent);
 
   function sparseJWT(token) {
-    setFcn.setAuthToken(token);
     let decodedJWT = jwt_decode(token);
     if (username == decodedJWT['cognito:username']) {
-      setFcn.setAuthUsername(username);
-      setFcn.setEmailAdress(decodedJWT['email']);
-      setFcn.setExpTime(decodedJWT['exp']);
+      setFcn.setInfoToStore(token, username, decodedJWT['exp']);
       navigation.navigate('Home');
     } else {
       setFcn.setAuthToken('null');
