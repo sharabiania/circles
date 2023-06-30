@@ -15,7 +15,7 @@ export default function AccountConfirmationScreen({ navigation }) {
   const { setFcn, storedInfo } = useContext(AuthContent);
 
   async function handleLoginRsp(response) {
-    console.log('.........'+JSON.stringify(response))
+   
     if (response.status !== 200) {
       alert('Server is down, try again');
     } else if (response.status == 200) {
