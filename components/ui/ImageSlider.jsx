@@ -59,6 +59,8 @@ const ImageSlider = (images) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+
+    
   },
   image: {
   width: Dimensions.get('window').width,
