@@ -1,4 +1,5 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   Text,
   SafeAreaView,
@@ -11,10 +12,10 @@ import { login } from '../util/auth';
 import LoadingOverlay from './ui/LoadingOverlays';
 import jwt_decode from 'jwt-decode';
 
+
 export default function LoginScreen({ navigation }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [expiration, setExpiration] = useState('');
   const [isAuthenticating, setIsAuthenticating] = useState(false);
 
   const { setFcn } = useContext(AuthContent);
@@ -22,10 +23,11 @@ export default function LoginScreen({ navigation }) {
   function sparseJWT(token) {
     let decodedJWT = jwt_decode(token);
     if (username == decodedJWT['cognito:username']) {
+      AsyncStorage.setItem('token', token);
+      AsyncStorage.setItem('username', username);
+      AsyncStorage.setItem('expiration', decodedJWT['exp'].toString());
       setFcn.setInfoToStore(token, username, decodedJWT['exp']);
       navigation.navigate('Home');
-    } else {
-      setFcn.setAuthToken('null');
     }
   }
 

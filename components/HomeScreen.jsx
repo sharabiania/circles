@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { Text, View,SafeAreaView, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import EventList from './EventList';
 import MasterList from './MasterList';
@@ -37,6 +37,7 @@ const HomeNotLoginView = () => {
 };
 
 export default function HomeScreen() {
+
   const { storedInfo, setFcn } = useContext(AuthContent);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -50,6 +51,7 @@ export default function HomeScreen() {
       {!storedInfo.isAuthenticated && <HomeNotLoginView />}
 
       {storedInfo.isAuthenticated && (
+        <SafeAreaView>
         <View style={styles.authContainer}>
           <View style={styles.welcomeContainer}>
             <Text style={styles.textWelcome}>
@@ -73,6 +75,7 @@ export default function HomeScreen() {
             onLogout={handleLogout}
           />
         </View>
+        </SafeAreaView>
       )}
 
       {storedInfo.isAuthenticated && (
