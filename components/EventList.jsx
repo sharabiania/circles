@@ -1,11 +1,10 @@
-import React, { useState, useContext, useEffect, Component } from 'react';
+import React, { useState, useContext, useEffect} from 'react';
 import {
   FlatList,
   SafeAreaView,
   StatusBar,
   StyleSheet,
   Text,
-  Image,
   Button,
   TouchableOpacity,
 } from 'react-native';
@@ -13,6 +12,7 @@ import { getEvents } from '../util/auth';
 import { AuthContent } from '../store/auth-context';
 import { getImage } from '../util/auth';
 import ImageSlider from './ui/ImageSlider';
+import Spinner from './ui/Spinner';
 
 
 const blobToDataURL = (blob) => {
@@ -26,7 +26,6 @@ const blobToDataURL = (blob) => {
 
 function Item({ item, onPress, backgroundColor, textColor }) {
   const [btnText, setBtnText] = useState('Join');
-  ///const [imageUrl, setImageUrl] = useState([]);
   const [images, setImages] = useState([]);
   const { storedInfo, setFcn } = useContext(AuthContent);
 
@@ -51,7 +50,6 @@ function Item({ item, onPress, backgroundColor, textColor }) {
         blobToDataURL(blob)
           .then((url) => {
             imagesArray=[...imagesArray, { id: id, source: url}];
-            console.log(imagesArray.length)
             setImages(imagesArray)
           })
           .catch((error) => {
@@ -64,37 +62,12 @@ function Item({ item, onPress, backgroundColor, textColor }) {
       }
     };
 
-
-      
-      //const parts = imageUrlAdd.split('/');
-      //const fileName = parts[1];
-      //const response = await getImage(storedInfo.token, fileName);
-      //const blob = await response.blob();
-      //blobToDataURL(blob)
-      //  .then((url) => {
-      //    setImages([{ id: 1, source: url}, { id: 2, source: url}, { id: 3, source: url}]);
-      //  })
-      //  .catch((error) => {
-      //    console.error('Error converting Blob to data URL:', error);
-      //  });
-      //  
-
-   // } catch (error) {
-   //   console.log(error);
-   // }
- // };
- 
-
   return (
     <SafeAreaView style={[styles.item, { backgroundColor }]}>
-        {!!true && (
         <Text style={[styles.title, { color: textColor }]}>{item.title}</Text>
-      )}
+     
         {!!images && <ImageSlider images={images} ></ImageSlider>}
-       {/*!!false && (
-        <Image source={{ uri: imageUrl }} style={[styles.item, { width: 300, height: 200  }]} />
-
-       )*/}
+        {images.length==0 && <Spinner/>}
     <TouchableOpacity
       onPress={onPress}
       style={[styles.item, { backgroundColor }]}
