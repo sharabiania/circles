@@ -5,7 +5,7 @@ import EventList from './EventList';
 import MasterList from './MasterList';
 import { useContext } from 'react';
 import { AuthContent } from '../store/auth-context';
-import { useState } from 'react';
+import { useState} from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import LogoutModal from './ui/LogOutModal';
@@ -42,15 +42,15 @@ export default function HomeScreen() {
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleLogout = () => {
+    setFcn.logOut();
     setModalVisible(false);
-    setFcn.logOut(null);
   };
 
   return (
     <>
       {!storedInfo.isAuthenticated && <HomeNotLoginView />}
 
-      {storedInfo.isAuthenticated && (
+      {!!storedInfo.isAuthenticated && (
         <SafeAreaView>
         <View style={styles.authContainer}>
           <View style={styles.welcomeContainer}>
@@ -78,7 +78,7 @@ export default function HomeScreen() {
         </SafeAreaView>
       )}
 
-      {storedInfo.isAuthenticated && (
+      {!!storedInfo.isAuthenticated && (
         <Tab.Navigator
           screenOptions={({ route }) => ({
             tabBarIcon: ({ focused, color, size }) => {

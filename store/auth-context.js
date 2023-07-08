@@ -6,28 +6,27 @@ export const AuthContent = createContext({});
 export default function AuthContentProvider(props) {
   const [username, setUsername] = useState('');
   const [token, setToken] = useState('');
-  const [expiration, setExpiration] = useState('');
-
-  const settingUsername = (username) => {
-    setUsername(username);
-  };
-  
 
   useEffect(() => {
     async function fetchToken() {
-      const storedToken = await AsyncStorage.getItem('token');
       const storedExpiration = await AsyncStorage.getItem('expiration');
+      const expirationDate = new Date(storedExpiration*1000).toUTCString();
+      let currentDate = new Date().toUTCString();
+      if (currentDate > expirationDate) {
+        logOut();
+        alert('credentials not valid anymore, login again')
+      }else {
+      const storedToken = await AsyncStorage.getItem('token');
       const storedUsername = await AsyncStorage.getItem('username');
-      setInfoToStore(storedToken, storedUsername, storedExpiration);
+      setInfoToStore(storedToken, storedUsername);}
     }
     fetchToken();
     
   }, []);
 
-  const setInfoToStore = (token, username, expiration) => {
+  const setInfoToStore = (token, username) => {
     setToken(token);
     setUsername(username);
-    setExpiration(expiration);
   };
 
   const logOut = () => {
@@ -41,13 +40,11 @@ export default function AuthContentProvider(props) {
     username: username,
     token: token,
     isAuthenticated: !!token,
-    expiration: expiration,
   };
 
   const setFcn = {
     setInfoToStore: setInfoToStore,
-    logOut: logOut,
-    settingUsername:settingUsername,
+    logOut: logOut
   };
   const value = {
     storedInfo: storedInfo,

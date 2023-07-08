@@ -134,15 +134,12 @@ export default function EventList() {
     if (selectedId.includes(id)){
        let tempArray=selectedId.filter((element)=>element!==id);
        setSelectedId(tempArray);
-       console.log('rmv'+selectedId)
     }else{
       setSelectedId([...selectedId, id])
-      console.log('add'+selectedId)
     }
   }
   
   const renderItem = ({ item }) => {
-    //const backgroundColor = item.id === selectedId ? '#6e3b6e' : '#f9c2ff';
     const backgroundColor = selectedId.includes(item.id) ? '#6e3b6e' : '#f9c2ff';
     const color = item.id === selectedId ? 'white' : 'black';
 

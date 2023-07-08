@@ -3,16 +3,7 @@ import { View, Image, FlatList, Dimensions, StyleSheet } from 'react-native';
 
 const ImageSlider = (images) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  console.log('............')
   let allImages=images.images;
-  //console.log('all images are...'+JSON.stringify(allImages))
-
-  const image = [
-    { id: 1, source: require('../../assets/icon.png') },
-    { id: 2, source: require('../../assets/favicon.png') },
-    { id: 3, source: require('../../assets/icon.png') },
-    // Add more images as needed
-  ];
 
   const handleScroll = (event) => {
     const newIndex = Math.floor((event.nativeEvent.contentOffset.x+0.5) / Dimensions.get('window').width);
@@ -59,8 +50,6 @@ const ImageSlider = (images) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
-    
   },
   image: {
   width: Dimensions.get('window').width,
@@ -87,49 +76,3 @@ const styles = StyleSheet.create({
 });
 
 export default ImageSlider;
-
-
-
-/*
-const ImageSlider = () => {
-    const [currentIndex, setCurrentIndex] = useState(0);
-  
-    const images = [
-      { id: 1, source: require('../../assets/human.png') },
-      { id: 2, source: require('../../assets/icon.png') },
-      { id: 3, source: require('../../assets/human.png') },
-      // Add more images as needed
-    ];
-  
-    return (
-      <View style={styles.container}>
-        <FlatList
-          data={images}
-          horizontal
-          pagingEnabled
-          showsHorizontalScrollIndicator={false}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <Image source={item.source} style={styles.image} resizeMode="cover" />
-          )}
-          onMomentumScrollEnd={(event) => {
-            const newIndex = Math.floor(event.nativeEvent.contentOffset.x / Dimensions.get('window').width);
-            setCurrentIndex(newIndex);
-          }}
-        />
-      </View>
-    );
-  };
-
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-    },
-    image: {
-      width: Dimensions.get('window').width/1.5,
-      height: Dimensions.get('window').height/5,
-    },
-  });
-
-  export default ImageSlider;
-  */

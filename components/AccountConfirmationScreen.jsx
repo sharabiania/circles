@@ -1,56 +1,36 @@
 import React, { useState, useContext } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
+import {View, Text, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
 import { AuthContent } from '../store/auth-context';
 import { signupConfirm, login } from '../util/auth';
-import jwt_decode from 'jwt-decode';
+import { handleJWT } from '../util/handleJWT';
+import LoadingOverlay from './ui/LoadingOverlays';
 
-export default function AccountConfirmationScreen({ navigation }) {
+
+export default function AccountConfirmationScreen({ navigation, route }) {
   const [code, setCode] = useState('');
-  const { setFcn, storedInfo } = useContext(AuthContent);
-
-  async function handleLoginRsp(response) {
-   
-    if (response.status !== 200) {
-      alert('Server is down, try again');
-    } else if (response.status == 200) {
-      const token = await response.text();
-      sparseJWT(token);
-    }
-  }
-
-  function sparseJWT(token) {
-    let decodedJWT = jwt_decode(token);
-    setFcn.setInfoToStore(
-      token,
-      decodedJWT['cognito:username'],
-      decodedJWT['exp']
-    );
-    navigation.navigate('Home');
-  }
+  const { setFcn} = useContext(AuthContent);
+  const {username, password}=route.params;
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
 
   async function handleConfirm() {
     try {
-      const response = await signupConfirm(storedInfo.username, code);
+      const response = await signupConfirm(username, code);
       if (response.status == 200) {
-        console.log('I am here and that is correct')
-        const loginResponse = await login(
-          storedInfo.username,
-          storedInfo.password
-        );
-        handleLoginRsp(loginResponse);
-      }else {
-        alert(response.text());
-      }
+        const loginResponse = await login(username, password);
+        if (response.status==200){
+          const token = await loginResponse.text();
+          setIsAuthenticating(false);
+          handleJWT(token, username);
+          setFcn.setInfoToStore(token, username);
+          navigation.navigate('Home');
+        }}
     } catch (error) {
       alert(error);
-      //setFcn.logOut(null);
     }
+  }
+
+  if (isAuthenticating) {
+    return <LoadingOverlay message='Logging you in...' />;
   }
 
   return (
