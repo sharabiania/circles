@@ -23,12 +23,3 @@ export async function getMasters(token) {
 export async function getImage(token, fileName) {
   return await request('images/'+fileName, 'GET', '', token, 'image/jpeg');
 }
-
-
-
-
-
-
-
-
-

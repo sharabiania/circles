@@ -22,7 +22,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.alilari1986.CirclesApp"
+      "package": "CirclesApp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
