@@ -1,13 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react';
-import {
-  TextInput,
-  Text,
-  SafeAreaView,
-  StyleSheet,
-  Button,
-} from 'react-native';
+import React, { useState, useEffect} from 'react';
+import {TextInput, Text, SafeAreaView, StyleSheet, Button} from 'react-native';
 import { signup } from '../util/auth.js';
-import { AuthContent } from '../store/auth-context';
 
 export default function RegisterScreen({ navigation }) {
   const [username, setUsername] = useState('');
@@ -21,7 +14,6 @@ export default function RegisterScreen({ navigation }) {
   const [isUsernameValid, setIsUsernameValid] = useState(true);
   const [validCredentials, setValidCredentials] = useState(false);
 
-  const { setFcn } = useContext(AuthContent);
   const minLength = 8;
 
   useEffect(() => {
@@ -60,9 +52,7 @@ export default function RegisterScreen({ navigation }) {
       try {
         const response = await signup(username, email, password);
         if (response.status == 201) {
-          setFcn.settingUsername(username);
-          setFcn.setPass(password);
-          navigation.navigate('Account Confirmation');
+          navigation.navigate('Account Confirmation', {username: username, password: password});
         }
         if (response.status != 201) {
           alert(response.stauts);
