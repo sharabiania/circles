@@ -15,6 +15,8 @@ const ImageSlider = (images) => {
     setCurrentIndex(newIndex);
   };
 
+  const renderSeparator = () => <View style={styles.separator} />;
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -25,6 +27,7 @@ const ImageSlider = (images) => {
         renderItem={({ item }) => (
           <Image source={{uri: item.source}} style={styles.image} resizeMode="contain" />
         )}
+        ItemSeparatorComponent={renderSeparator}
         pagingEnabled={true}
         onScroll={handleScroll}
         onMomentumScrollEnd={handleMomentumScrollEnd}
@@ -52,9 +55,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   image: {
-  width: Dimensions.get('window').width,
-    aspectRatio: 1, 
+   width: Dimensions.get('window').width*0.9,
+   aspectRatio: 1,    
+   resizeMode: 'cover',
   },
+  separator: {
+    width: Dimensions.get('window').width*0.1, 
+    backgroundColor:'#FFA500', 
+  },
+
+
   circleContainer: {
     flexDirection: 'row',
     justifyContent: 'center',

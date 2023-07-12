@@ -1,5 +1,12 @@
-import React, { useState, useEffect} from 'react';
-import {TextInput, Text, SafeAreaView, StyleSheet, Button} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+  TextInput,
+  Text,
+  SafeAreaView,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import { signup } from '../util/auth.js';
 
 export default function RegisterScreen({ navigation }) {
@@ -52,7 +59,10 @@ export default function RegisterScreen({ navigation }) {
       try {
         const response = await signup(username, email, password);
         if (response.status == 201) {
-          navigation.navigate('Account Confirmation', {username: username, password: password});
+          navigation.navigate('Account Confirmation', {
+            username: username,
+            password: password,
+          });
         }
         if (response.status != 201) {
           alert(response.stauts);
@@ -64,11 +74,11 @@ export default function RegisterScreen({ navigation }) {
   }
 
   return (
-    <SafeAreaView>
-      <Text>Register</Text>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.headerText}>Sign up</Text>
       <TextInput
         placeholder='Username'
-        style={isUsernameValid ? styles.input : styles.inputNotValid}
+        style={isUsernameValid ? styles.input : styles.invalidInput}
         onChangeText={setUsername}
         value={username}
       />
@@ -78,7 +88,7 @@ export default function RegisterScreen({ navigation }) {
 
       <TextInput
         placeholder='Email'
-        style={isEmailValid ? styles.input : styles.inputNotValid}
+        style={isEmailValid ? styles.input : styles.invalidInput}
         onChangeText={setEmail}
         value={email}
       />
@@ -86,7 +96,7 @@ export default function RegisterScreen({ navigation }) {
 
       <TextInput
         placeholder='Password'
-        style={isPassValid ? styles.input : styles.inputNotValid}
+        style={isPassValid ? styles.input : styles.invalidInput}
         secureTextEntry={true}
         onChangeText={setPassword}
         value={password}
@@ -95,7 +105,7 @@ export default function RegisterScreen({ navigation }) {
 
       <TextInput
         placeholder='Confirm Password'
-        style={isCfPassValid ? styles.input : styles.inputNotValid}
+        style={isCfPassValid ? styles.input : styles.invalidInput}
         secureTextEntry={true}
         onChangeText={setConfirmPassword}
         value={confirmPassword}
@@ -106,25 +116,40 @@ export default function RegisterScreen({ navigation }) {
         </Text>
       )}
 
-      <Button
-        title='sign Up'
+      <TouchableOpacity
+      style={styles.signUpButton}
         disabled={!validCredentials}
         onPress={signUpHandler}
-      ></Button>
+      >
+        <Text style={styles.signUpButtonText}>Sing up</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FECA6C',
+    alignItems: 'center'
+  },
+  headerText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom:30,
+    marginTop: 80,
+  },
   input: {
     height: 40,
+    width: '70%',
     margin: 12,
+    borderRadius: 6,
     borderWidth: 1,
     padding: 10,
-    borderRadius: 6,
   },
-  inputNotValid: {
+  invalidInput: {
     height: 40,
+    width: '70%',
     margin: 12,
     marginBottom: 2,
     borderWidth: 1,
@@ -136,6 +161,28 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginLeft: 12,
     paddingRight: 10,
-    color: 'red',
+    color: '#FF5400',
   },
+
+
+
+
+
+signUpButton: {
+  backgroundColor: '#FF5400',
+  borderRadius: 6,
+  paddingVertical: 10,
+  paddingHorizontal: 25,
+  marginTop: 20,
+},
+signUpButtonText: {
+  color: '#000000',
+  fontSize: 16,
+  fontWeight: 'bold',
+  textAlign: 'center',
+},
+
+
+
+ 
 });

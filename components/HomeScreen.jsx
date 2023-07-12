@@ -12,11 +12,11 @@ import LogoutModal from './ui/LogOutModal';
 
 const Tab = createBottomTabNavigator();
 
-const HomeNotLoginView = () => {
+const LoggedOutHomeScreen = () => {
   const navigation = useNavigation();
   return (
-    <View style={styles.unAuthContainer}>
-      <Text style={styles.appName}>Welcome to Spritual Life</Text>
+    <SafeAreaView  style={styles.loggedOutContainer}>
+      <Text style={styles.welcomeText}>Welcome to Spritual Life</Text>
       <TouchableOpacity
         style={styles.loginButton}
         onPress={() => navigation.navigate('Login')}
@@ -24,7 +24,6 @@ const HomeNotLoginView = () => {
         <Text style={styles.loginButtonText}>Login</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={styles.signUpButton}
         onPress={() => navigation.navigate('SignUp')}
       >
         <Text>
@@ -32,7 +31,7 @@ const HomeNotLoginView = () => {
         </Text>
         
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -48,39 +47,27 @@ export default function HomeScreen() {
 
   return (
     <>
-      {!storedInfo.isAuthenticated && <HomeNotLoginView />}
-
+      {!storedInfo.isAuthenticated && <LoggedOutHomeScreen />}
       {!!storedInfo.isAuthenticated && (
-        <SafeAreaView>
-        <View style={styles.authContainer}>
-          <View style={styles.welcomeContainer}>
-            <Text style={styles.textWelcome}>
-              Welcome {storedInfo.username}!
-            </Text>
-          </View>
-
+        <SafeAreaView style={styles.loggedinContainer}>
+          <View style={styles.avatarContainer}>
           <TouchableOpacity
-            style={styles.logoutContainer}
+            style={styles.avatar}
             onPress={() => setModalVisible(true)}
           >
-            <Image
-                source={require('../assets/human.png')}
-                style={styles.buttonImage}
-              />
+            <Text>{storedInfo.username.substring(0, 2).toUpperCase()}</Text>
           </TouchableOpacity>
+         </View>
 
           <LogoutModal
             visible={modalVisible}
             onCancel={() => setModalVisible(false)}
             onLogout={handleLogout}
           />
-        </View>
-        </SafeAreaView>
-      )}
-
-      {!!storedInfo.isAuthenticated && (
+        
         <Tab.Navigator
           screenOptions={({ route }) => ({
+            tabBarStyle: {backgroundColor: '#FECA6C'},
             tabBarIcon: ({ focused, color, size }) => {
               let iconName;
               if (route.name === 'Events') {
@@ -93,80 +80,72 @@ export default function HomeScreen() {
 
               return <Ionicons name={iconName} size={size} color={color} />;
             },
-            tabBarActiveTintColor: 'tomato',
-            tabBarInactiveTintColor: 'gray',
+            tabBarActiveTintColor: '#FF5400',
+            tabBarInactiveTintColor: '#000000',
           })}
+          tabBarStyle={{backgroundColor: '#FECA6C'}} 
         >
-          <Tab.Screen name='Events' component={EventList} />
-          <Tab.Screen name='Masters' component={MasterList} />
+          <Tab.Screen name='Events' component={EventList} options={{ headerShown: false}}/>
+          <Tab.Screen name='Masters' component={MasterList} options={{ headerShown: false}}/>
         </Tab.Navigator>
+        </SafeAreaView>
       )}
+      
     </>
   );
 }
 const styles = StyleSheet.create({
-  authContainer: {
-    borderWidth: 1,
-    borderColor: 'white',
-    padding: 5,
-    backgroundColor: 'darkorchid',
-    flexDirection: 'row',
-  },
-  textWelcome: {
+  loggedinContainer:{
     flex:1,
-    fontSize: 15,
-    fontWeight: 'bold',
-    alignItems:'center',
-    color: 'yellow',
+    backgroundColor: '#FECA6C',
+    justifyContent: 'center'
   },
-  welcomeContainer:{
+  loggedOutContainer: {
     flex:1,
-    alignItems:'center',
-    marginTop: 10,
-    justifyContent: 'flex-end',
-  },
-  unAuthContainer: {
-    flex: 1,
-    justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: 'lightyellow',
+    backgroundColor: '#FECA6C',
   },
-  appName: {
+  welcomeText: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 80,
+    marginBottom: 150,
     marginTop: 100,
   },
   loginButton: {
-    backgroundColor: 'grey',
+    backgroundColor: '#FF5400',
     borderRadius: 6,
-    paddingVertical: 12,
-    paddingHorizontal: 30,
+    paddingVertical: 10,
+    paddingHorizontal: 25,
     marginBottom: 20,
-    marginTop: 80,
   },
   loginButtonText: {
-    color: 'white',
+    color: '#000000',
     fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'center',
   },
-  signUpButton: {
-    marginBottom: 10,
-  },
   signUpButtonText:{
+    fontSize:16,
     fontWeight: 'bold',
-    color: 'blue',
+    color: '#FF5400',
   },
-  logoutContainer: {
-    flex:1,
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
+
+  avatarContainer: {
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    marginRight:6,
+    marginTop:35,
   },
-  buttonImage: {
+  avatar: {
     width: 40,
     height: 40,
     borderRadius: 20,
+    backgroundColor: '#FFA500',
+    borderColor: '#FF5400',
+    borderWidth: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
+
+
 });

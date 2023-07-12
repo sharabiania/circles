@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import {
   FlatList,
   SafeAreaView,
-  StatusBar,
+  Dimensions,
   StyleSheet,
   Text,
   Button,
@@ -18,11 +18,11 @@ function Item({ item, onPress, backgroundColor, textColor }) {
       onPress={onPress}
       style={[styles.item, { backgroundColor }]}
     >
-      <Text style={[styles.title, { color: textColor }]}>{item.title}</Text>
+      <Text style={[styles.title, { color: textColor }]}>{item.fullname}</Text>
       <Text>{item.location}</Text>
       <Button
         title={btnText}
-        color='#841584'
+        color='#FF5400'
         onPress={() => {
           if (btnText === 'follow') {
             setBtnText('unfollow');
@@ -34,22 +34,6 @@ function Item({ item, onPress, backgroundColor, textColor }) {
     </TouchableOpacity>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
-  },
-  item: {
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-    borderRadius: 5,
-  },
-  title: {
-    fontSize: 32,
-  },
-});
 
 export default function MasterList() {
   const [selectedId, setSelectedId] = useState();
@@ -74,7 +58,7 @@ export default function MasterList() {
   }
 
   const renderItem = ({ item }) => {
-    const backgroundColor = item.id === selectedId ? '#6e3b6e' : '#f9c2ff';
+    const backgroundColor = item.id === selectedId ? '#FF5400' : '#FFA500';
     const color = item.id === selectedId ? 'white' : 'black';
 
     return (
@@ -88,9 +72,8 @@ export default function MasterList() {
   };
 
   return (
-    <>
-      <Text>List of all registered masters.</Text>
-      <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.header}>List of all registered masters</Text>
         <FlatList
           data={data}
           renderItem={renderItem}
@@ -98,6 +81,32 @@ export default function MasterList() {
           extraData={selectedId}
         />
       </SafeAreaView>
-    </>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FECA6C',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  header:{
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    marginLeft:5,
+  },
+  item: {
+    padding: 5,
+    marginVertical: 12,
+    borderRadius: 12,
+    alignItems: 'center',
+    padding:8,
+    width: Dimensions.get('window').width*0.95,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: 'bold'
+  },
+});

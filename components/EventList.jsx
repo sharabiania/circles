@@ -1,8 +1,7 @@
 import React, { useState, useContext, useEffect} from 'react';
 import {
   FlatList,
-  SafeAreaView,
-  StatusBar,
+  View,
   StyleSheet,
   Text,
   Button,
@@ -13,6 +12,7 @@ import { AuthContent } from '../store/auth-context';
 import { getImage } from '../util/auth';
 import ImageSlider from './ui/ImageSlider';
 import Spinner from './ui/Spinner';
+import { joinEvent, cancelEvent } from '../util/auth';
 
 
 const blobToDataURL = (blob) => {
@@ -35,6 +35,35 @@ function Item({ item, onPress, backgroundColor, textColor }) {
     }, []);
   }
 
+  
+  async function attendEvent() {
+    if (btnText === 'Join') {
+      setBtnText('Cancel Request');
+    try {
+      const response = await joinEvent(storedInfo.token, item.id);
+
+      const status = response.status;
+      if (status === 200) {
+        alert('you successfully joined the event')
+      }
+    } catch (error) {
+      alert(error);
+    }
+  } else {
+    setBtnText('Join');
+    try {
+      const response = await cancelEvent(storedInfo.token, item.id);
+
+      const status = response.status;
+      if (status === 200) {
+        alert('you successfully cancel the event')
+      }
+    } catch (error) {
+      alert(error);
+    }
+  }
+}
+  
   
   const eventImage = async () => {
     try {
@@ -61,12 +90,11 @@ function Item({ item, onPress, backgroundColor, textColor }) {
         console.log(error);
       }
     };
-
+  
   return (
-    <SafeAreaView style={[styles.item, { backgroundColor }]}>
+    <View style={[styles.item, { backgroundColor }]}>
         <Text style={[styles.title, { color: textColor }]}>{item.title}</Text>
-     
-        {!!images && <ImageSlider images={images} ></ImageSlider>}
+        {!!images[0] && <ImageSlider images={images} ></ImageSlider>}
         {images.length==0 && <Spinner/>}
     <TouchableOpacity
       onPress={onPress}
@@ -78,35 +106,14 @@ function Item({ item, onPress, backgroundColor, textColor }) {
       <Text>{item.description}</Text>
       <Button
         title={btnText}
-        color='#841584'
-        onPress={() => {
-          if (btnText === 'Join') {
-            setBtnText('Cancel Request');
-          } else {
-            setBtnText('Join');
-          }
-        }}
+        color='#FF5400'
+        onPress={attendEvent}
       />
     </TouchableOpacity>
-    </SafeAreaView>
+    </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
-  },
-  item: {
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-    borderRadius: 5,
-  },
-  title: {
-    fontSize: 28,
-  },
-});
 
 export default function EventList() {
   const [selectedId, setSelectedId] = useState([]);
@@ -126,6 +133,7 @@ export default function EventList() {
     }
   }
 
+
   if (!data && storedInfo.isAuthenticated) {
     getEventList(storedInfo.token);
   }
@@ -140,7 +148,7 @@ export default function EventList() {
   }
   
   const renderItem = ({ item }) => {
-    const backgroundColor = selectedId.includes(item.id) ? '#6e3b6e' : '#f9c2ff';
+    const backgroundColor = selectedId.includes(item.id) ? '#FF5400' :'#FFA500';
     const color = item.id === selectedId ? 'white' : 'black';
 
     return (
@@ -154,16 +162,42 @@ export default function EventList() {
   };
 
   return (
-    <>
-      <Text>List of all upcoming events</Text>
-      <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
+      <Text style={styles.header}>List of all upcoming events</Text>
+      
         <FlatList
           data={data}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
           extraData={selectedId}
         />
-      </SafeAreaView>
-    </>
+    </View>
   );
 }
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FECA6C',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  header:{
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    marginLeft:5,
+  },
+  item: {
+    padding: 5,
+    marginVertical: 12,
+    marginHorizontal: '5%',
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: 'bold'
+  },
+});

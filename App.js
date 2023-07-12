@@ -19,8 +19,8 @@ export default function App() {
             component={HomeScreen}
             options={{ headerShown: false}}
           />
-          <Stack.Screen name='Login' component={LoginScreen} />
-          <Stack.Screen name='SignUp' component={RegisterScreen} />
+          <Stack.Screen name='Login' component={LoginScreen} options={{ headerShown: false}}/>
+          <Stack.Screen name='SignUp' component={RegisterScreen} options={{ headerShown: false}}/>
           <Stack.Screen
             name='Account Confirmation'
             component={AccountConfirmationScreen}

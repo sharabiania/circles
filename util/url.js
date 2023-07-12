@@ -6,7 +6,8 @@ export async function request(route, method, body, token, contentType) {
   if (method == 'POST') {
     const response = await fetch(baseUrl + route, {
       method: method,
-      headers: { 'Content-Type': contentType },
+      headers: { Authorization: `Bearer ${token}`,
+                'Content-Type': contentType },
       body: JSON.stringify(body),
     });
     return response;
@@ -21,3 +22,4 @@ export async function request(route, method, body, token, contentType) {
 
   } 
 }
+

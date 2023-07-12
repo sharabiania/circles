@@ -23,3 +23,11 @@ export async function getMasters(token) {
 export async function getImage(token, fileName) {
   return await request('images/'+fileName, 'GET', '', token, 'image/jpeg');
 }
+
+export async function joinEvent(token, eventId) {
+  return await request('event/'+eventId+'/join', 'POST', '',token, 'application/json');
+}
+
+export async function cancelEvent(token, eventId) {
+  return await request('event/'+eventId+'/cancel', 'POST', '', token, 'application/json');
+}
