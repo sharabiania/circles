@@ -19,13 +19,13 @@ export default function AccountConfirmationScreen({ navigation, route }) {
         const loginResponse = await login(username, password);
         if (response.status==200){
           const token = await loginResponse.text();
+          setFcn.setInfoToStore(token, username);
           setIsAuthenticating(false);
           handleJWT(token, username);
-          setFcn.setInfoToStore(token, username);
           navigation.navigate('Home');
         }}
     } catch (error) {
-      alert(error);
+      alert(error);  
     }
   }
 
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#FECA6C',
   },
   title: {
     fontSize: 24,
@@ -74,20 +74,21 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 50,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: '#000000',
     borderRadius: 5,
     paddingHorizontal: 10,
     marginBottom: 20,
     fontSize: 16,
   },
   button: {
-    backgroundColor: '#007bff',
+    backgroundColor: '#FF5400',
+    borderRadius: 6,
     paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
+    paddingHorizontal: 25,
+    marginTop: 20,
   },
   buttonText: {
-    color: '#fff',
+    color: '#000000',
     fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'center',
