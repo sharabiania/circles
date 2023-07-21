@@ -1,11 +1,9 @@
-import React from 'react';
+import React , {useState, useContext} from 'react';
 import { Text, View,SafeAreaView, StyleSheet, TouchableOpacity} from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import EventList from './EventList';
 import MasterList from './MasterList';
-import { useContext } from 'react';
 import { AuthContent } from '../store/auth-context';
-import { useState} from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import LogoutModal from './ui/LogOutModal';
@@ -44,7 +42,7 @@ export default function HomeScreen() {
     setFcn.logOut();
     setModalVisible(false);
   };
-
+  
   return (
     <>
       {!storedInfo.isAuthenticated && <LoggedOutHomeScreen />}
@@ -55,7 +53,8 @@ export default function HomeScreen() {
             style={styles.avatar}
             onPress={() => setModalVisible(true)}
           >
-            <Text>{storedInfo.username.substring(0, 2).toUpperCase()}</Text>
+          {/*<<!!storedInfo.username>> neccassay for the line below in expo debug; In browser it works without it though*/}
+          {!!storedInfo.username && <Text>{storedInfo.username.substring(0, 2).toUpperCase()}</Text>}
           </TouchableOpacity>
          </View>
 

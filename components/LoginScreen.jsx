@@ -1,7 +1,6 @@
 import { useContext, useState } from 'react';
 import {
   Text,
-  View,
   SafeAreaView,
   TextInput,
   StyleSheet,
@@ -22,11 +21,11 @@ export default function LoginScreen({ navigation }) {
     setIsAuthenticating(true);
     try {
       const response = await login(username, password);
-      if (response.status == 200) {
+      if (response.status == 200) { 
         const token = await response.text();
+        setFcn.setInfoToStore(token, username);
         setIsAuthenticating(false);
         handleJWT(token, username);
-        setFcn.setInfoToStore(token, username);
         navigation.navigate('Home');
       } else if (response.status == 401) {
         alert('credentials not correct');

@@ -5,7 +5,7 @@ const LogoutModal = ({ visible, onCancel, onLogout }) => {
   return (
     <Modal
       animationType="slide"
-      transparent={true}
+      transparent
       visible={visible}
       onRequestClose={onCancel}
     >
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
-    backgroundColor: 'white',
+    backgroundColor: '#FECA6C',
     borderRadius: 10,
     padding: 20,
   },
@@ -47,13 +47,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   modalCancelButton: {
-    backgroundColor: 'gray',
+    backgroundColor: '#FFA500',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
   },
   modalSignOutButton: {
-    backgroundColor: 'red',
+    backgroundColor: '#FF5400',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
